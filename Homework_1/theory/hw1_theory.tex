@@ -1,0 +1,806 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{mathtools}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+
+\title{Homework 1 -- Theory}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ============================================================
+\section*{1}
+
+Let \(D\) be any distribution on \(\{-1,1\}^n\), and let
+\[
+f,g:\{-1,1\}^n\to\{-1,1\}.
+\]
+
+\subsection*{(a)}
+
+Since \(f(x),g(x)\in\{-1,1\}\),
+\[
+f(x)g(x)
+=
+\begin{cases}
++1, & f(x)=g(x),\\
+-1, & f(x)\neq g(x).
+\end{cases}
+\]
+
+Let
+\[
+p=\Pr_{x\sim D}[f(x)\neq g(x)].
+\]
+Then
+\[
+\Pr_{x\sim D}[f(x)=g(x)]=1-p.
+\]
+Therefore
+\begin{align*}
+\mathbb{E}_{x\sim D}[f(x)g(x)]
+&=(+1)\Pr[f(x)=g(x)]+(-1)\Pr[f(x)\neq g(x)]\\
+&=(1-p)-p\\
+&=1-2p.
+\end{align*}
+Solving for \(p\),
+\[
+2p=1-\mathbb{E}_{x\sim D}[f(x)g(x)],
+\]
+so
+\[
+\boxed{
+\Pr_{x\sim D}[f(x)\neq g(x)]
+=
+\frac{1-\mathbb{E}_{x\sim D}[f(x)g(x)]}{2}.
+}
+\]
+
+\subsection*{(b)}
+
+Yes. The argument only uses that \(f(x)\) and \(g(x)\) take values in
+\(\{-1,1\}\). It does not depend on the domain being \(\{-1,1\}^n\).
+Also, \(|f(x)g(x)|=1\), so the expectation is defined for any distribution
+\(D\). Thus the same identity holds for any domain, including
+\(\mathbb{R}^n\).
+
+% ============================================================
+\section*{2}
+
+Let \(f\) be a decision tree with \(t\) leaves over
+\[
+x=(x_1,\ldots,x_n)\in\{-1,1\}^n.
+\]
+Interpret \(1\) as TRUE and \(-1\) as FALSE.
+
+For a leaf \(\ell\), suppose the path to that leaf requires
+\[
+x_{i_{\ell,1}}=b_{\ell,1},\ldots,
+x_{i_{\ell,d_\ell}}=b_{\ell,d_\ell},
+\qquad
+b_{\ell,j}\in\{-1,1\},
+\]
+and let the label at the leaf be
+\[
+y_\ell\in\{-1,1\}.
+\]
+
+For one condition \(x_i=b\), consider
+\[
+\frac{1+bx_i}{2}.
+\]
+Since \(b^2=1\),
+\[
+x_i=b
+\quad\Longrightarrow\quad
+\frac{1+bx_i}{2}
+=
+\frac{1+b^2}{2}
+=
+1,
+\]
+while
+\[
+x_i=-b
+\quad\Longrightarrow\quad
+\frac{1+bx_i}{2}
+=
+\frac{1-b^2}{2}
+=
+0.
+\]
+Thus
+\[
+\frac{1+bx_i}{2}
+=
+\begin{cases}
+1, & x_i=b,\\
+0, & x_i\neq b.
+\end{cases}
+\]
+
+Multiplying these factors along the path gives the indicator polynomial
+\[
+I_\ell(x)
+=
+\prod_{j=1}^{d_\ell}
+\frac{1+b_{\ell,j}x_{i_{\ell,j}}}{2}.
+\]
+Each factor is \(0\) or \(1\), so \(I_\ell(x)=1\) exactly when \(x\)
+follows the path to leaf \(\ell\), and \(I_\ell(x)=0\) otherwise.
+
+Define
+\[
+\boxed{
+p(x)
+=
+\sum_{\ell=1}^{t}y_\ell I_\ell(x)
+=
+\sum_{\ell=1}^{t}
+y_\ell
+\prod_{j=1}^{d_\ell}
+\frac{1+b_{\ell,j}x_{i_{\ell,j}}}{2}.
+}
+\]
+
+For any \(x\in\{-1,1\}^n\), exactly one leaf is reached, since at each
+internal node the queried variable has a single value and one branch is
+taken. If that leaf is \(\ell(x)\), then
+\[
+I_{\ell(x)}(x)=1.
+\]
+Any other leaf's path starts at the same root but ends elsewhere, so it
+diverges at some node and requires a value that \(x\) does not have. That
+factor is \(0\), so its indicator is \(0\). Hence
+\[
+p(x)
+=
+y_{\ell(x)}\cdot 1
++
+\sum_{\ell\neq\ell(x)}y_\ell\cdot 0
+=
+y_{\ell(x)}
+=
+f(x).
+\]
+Therefore
+\[
+\boxed{
+p(x)=f(x)
+\qquad
+\text{for every }x\in\{-1,1\}^n.
+}
+\]
+
+% ============================================================
+\section*{3}
+
+The Gini function is
+\[
+C(a)=2a(1-a),
+\]
+where \(a\) is the fraction of negative examples at a node. For a split on
+a variable \(X_i\),
+\[
+\mathrm{new}(X_i)
+=
+\Pr_S[X_i=0]\,
+C\!\left(\Pr_S[\mathrm{neg}\mid X_i=0]\right)
++
+\Pr_S[X_i=1]\,
+C\!\left(\Pr_S[\mathrm{neg}\mid X_i=1]\right),
+\]
+where \(\mathrm{old}=C(\Pr_S[\mathrm{neg}])\) is the impurity at the node
+before the split, and
+\[
+\mathrm{gain}(X_i)
+=
+\mathrm{old}-\mathrm{new}(X_i).
+\]
+The tree is required to be a full binary tree of depth two, so every internal
+node is split even if both of its children carry the same majority label.
+
+\paragraph{Root counts.}
+
+The total number of positive examples is
+\[
+10+25+35+35+5+30+10+15=165,
+\]
+and the total number of negative examples is
+\[
+20+5+15+5+15+10+10+5=85.
+\]
+Thus
+\[
+|S|=250,
+\]
+and the impurity before the first split is
+\[
+\mathrm{old}
+=
+C\!\left(\frac{85}{250}\right)
+=
+2\left(\frac{85}{250}\right)\left(\frac{165}{250}\right)
+=
+0.4488.
+\]
+
+\paragraph{Root split on \(X\).}
+
+For \(X=0\),
+\[
+105\text{ pos},\qquad45\text{ neg},\qquad150\text{ total},
+\]
+so
+\[
+C\!\left(\frac{45}{150}\right)
+=
+2\left(\frac{45}{150}\right)\left(\frac{105}{150}\right)
+=
+0.42.
+\]
+For \(X=1\),
+\[
+60\text{ pos},\qquad40\text{ neg},\qquad100\text{ total},
+\]
+so
+\[
+C\!\left(\frac{40}{100}\right)
+=
+2(0.4)(0.6)
+=
+0.48.
+\]
+Therefore
+\[
+\mathrm{new}(X)
+=
+\frac{150}{250}(0.42)
++
+\frac{100}{250}(0.48)
+=
+0.444,
+\]
+and
+\[
+\mathrm{gain}(X)=0.4488-0.444=0.0048.
+\]
+
+\paragraph{Root split on \(Y\).}
+
+For \(Y=0\),
+\[
+70\text{ pos},\qquad50\text{ neg},\qquad120\text{ total},
+\]
+so
+\[
+C\!\left(\frac{50}{120}\right)
+=
+2\left(\frac{5}{12}\right)\left(\frac{7}{12}\right)
+=
+\frac{35}{72}
+\approx0.4861.
+\]
+For \(Y=1\),
+\[
+95\text{ pos},\qquad35\text{ neg},\qquad130\text{ total},
+\]
+so
+\[
+C\!\left(\frac{35}{130}\right)
+=
+2\left(\frac{7}{26}\right)\left(\frac{19}{26}\right)
+=
+\frac{133}{338}
+\approx0.3935.
+\]
+Hence
+\[
+\mathrm{new}(Y)
+=
+\frac{120}{250}\cdot\frac{35}{72}
++
+\frac{130}{250}\cdot\frac{133}{338}
+=
+\frac{427}{975}
+\approx0.4379,
+\]
+and
+\[
+\mathrm{gain}(Y)
+=
+0.4488-0.4379
+\approx0.0109.
+\]
+
+\paragraph{Root split on \(Z\).}
+
+For \(Z=0\),
+\[
+60\text{ pos},\qquad60\text{ neg},\qquad120\text{ total},
+\]
+so
+\[
+C\!\left(\frac{60}{120}\right)=0.5.
+\]
+For \(Z=1\),
+\[
+105\text{ pos},\qquad25\text{ neg},\qquad130\text{ total},
+\]
+so
+\[
+C\!\left(\frac{25}{130}\right)
+=
+2\left(\frac{5}{26}\right)\left(\frac{21}{26}\right)
+=
+\frac{105}{338}
+\approx0.3107.
+\]
+Thus
+\[
+\mathrm{new}(Z)
+=
+\frac{120}{250}(0.5)
++
+\frac{130}{250}\cdot\frac{105}{338}
+=
+\frac{261}{650}
+\approx0.4015,
+\]
+and
+\[
+\mathrm{gain}(Z)
+=
+0.4488-0.4015
+\approx0.0473.
+\]
+
+Comparing the gains,
+\[
+0.0473>0.0109>0.0048,
+\]
+so the root split is
+\[
+\boxed{Z}.
+\]
+
+\paragraph{Node \(Z=0\).}
+
+This node contains
+\[
+60\text{ pos},\qquad60\text{ neg},
+\]
+so
+\[
+\mathrm{old}
+=
+C\!\left(\frac{60}{120}\right)
+=
+0.5.
+\]
+
+For a split on \(X\),
+\[
+X=0:\quad45\text{ pos},\ 35\text{ neg},\ 80\text{ total},
+\]
+with
+\[
+C\!\left(\frac{35}{80}\right)
+=
+\frac{63}{128}
+\approx0.4922,
+\]
+and
+\[
+X=1:\quad15\text{ pos},\ 25\text{ neg},\ 40\text{ total},
+\]
+with
+\[
+C\!\left(\frac{25}{40}\right)
+=
+\frac{15}{32}
+=
+0.46875.
+\]
+Therefore
+\[
+\mathrm{new}(X)
+=
+\frac{80}{120}\cdot\frac{63}{128}
++
+\frac{40}{120}\cdot\frac{15}{32}
+=
+\frac{31}{64}
+=
+0.484375,
+\]
+so
+\[
+\mathrm{gain}(X)
+=
+0.5-0.484375
+=
+0.015625.
+\]
+
+For a split on \(Y\),
+\[
+Y=0:\quad15\text{ pos},\ 35\text{ neg},\ 50\text{ total},
+\]
+with
+\[
+C\!\left(\frac{35}{50}\right)=0.42,
+\]
+and
+\[
+Y=1:\quad45\text{ pos},\ 25\text{ neg},\ 70\text{ total},
+\]
+with
+\[
+C\!\left(\frac{25}{70}\right)
+=
+\frac{45}{98}
+\approx0.4592.
+\]
+Therefore
+\[
+\mathrm{new}(Y)
+=
+\frac{50}{120}(0.42)
++
+\frac{70}{120}\cdot\frac{45}{98}
+=
+\frac{31}{70}
+\approx0.4429,
+\]
+so
+\[
+\mathrm{gain}(Y)
+=
+0.5-\frac{31}{70}
+=
+\frac{2}{35}
+\approx0.0571.
+\]
+
+Since
+\[
+0.0571>0.015625,
+\]
+this node splits on \(Y\). The majority labels are
+\[
+Z=0,\ Y=0:
+\quad15\text{ pos},\ 35\text{ neg}
+\Rightarrow -1,
+\]
+and
+\[
+Z=0,\ Y=1:
+\quad45\text{ pos},\ 25\text{ neg}
+\Rightarrow +1.
+\]
+
+\paragraph{Node \(Z=1\).}
+
+This node contains
+\[
+105\text{ pos},\qquad25\text{ neg},
+\]
+so
+\[
+\mathrm{old}
+=
+C\!\left(\frac{25}{130}\right)
+=
+\frac{105}{338}
+\approx0.3107.
+\]
+
+For a split on \(X\),
+\[
+X=0:\quad60\text{ pos},\ 10\text{ neg},\ 70\text{ total},
+\]
+with
+\[
+C\!\left(\frac{10}{70}\right)
+=
+\frac{12}{49}
+\approx0.2449,
+\]
+and
+\[
+X=1:\quad45\text{ pos},\ 15\text{ neg},\ 60\text{ total},
+\]
+with
+\[
+C\!\left(\frac{15}{60}\right)
+=
+\frac{3}{8}
+=
+0.375.
+\]
+Therefore
+\[
+\mathrm{new}(X)
+=
+\frac{70}{130}\cdot\frac{12}{49}
++
+\frac{60}{130}\cdot\frac{3}{8}
+=
+\frac{111}{364}
+\approx0.3049,
+\]
+so
+\[
+\mathrm{gain}(X)
+=
+0.3107-0.3049
+\approx0.0057.
+\]
+
+For a split on \(Y\),
+\[
+Y=0:\quad55\text{ pos},\ 15\text{ neg},\ 70\text{ total},
+\]
+with
+\[
+C\!\left(\frac{15}{70}\right)
+=
+\frac{33}{98}
+\approx0.3367,
+\]
+and
+\[
+Y=1:\quad50\text{ pos},\ 10\text{ neg},\ 60\text{ total},
+\]
+with
+\[
+C\!\left(\frac{10}{60}\right)
+=
+\frac{5}{18}
+\approx0.2778.
+\]
+Therefore
+\[
+\mathrm{new}(Y)
+=
+\frac{70}{130}\cdot\frac{33}{98}
++
+\frac{60}{130}\cdot\frac{5}{18}
+=
+\frac{13}{42}
+\approx0.3095,
+\]
+so
+\[
+\mathrm{gain}(Y)
+=
+0.3107-0.3095
+\approx0.0011.
+\]
+
+Since
+\[
+0.0057>0.0011,
+\]
+this node splits on \(X\). The majority labels are
+\[
+Z=1,\ X=0:
+\quad60\text{ pos},\ 10\text{ neg}
+\Rightarrow +1,
+\]
+and
+\[
+Z=1,\ X=1:
+\quad45\text{ pos},\ 15\text{ neg}
+\Rightarrow +1.
+\]
+
+The full depth-two tree is
+\[
+\boxed{
+\begin{array}{c}
+\text{root: }Z\\[2mm]
+Z=0\Rightarrow Y:
+\quad Y=0\mapsto -1,\quad Y=1\mapsto +1\\[1mm]
+Z=1\Rightarrow X:
+\quad X=0\mapsto +1,\quad X=1\mapsto +1.
+\end{array}
+}
+\]
+
+The four leaves classify
+\[
+35+45+60+45=185
+\]
+examples correctly and
+\[
+15+25+10+15=65
+\]
+incorrectly, with
+\[
+185+65=250.
+\]
+Thus
+\[
+\boxed{
+\mathrm{accuracy}
+=
+\frac{185}{250}
+=
+0.74
+=
+74\%.
+}
+\]
+
+% ============================================================
+\section*{4}
+
+Let the target function be \(h_{\theta^*}\). Draw \(m\) labeled examples
+\[
+S=\{(x^1,y^1),\ldots,(x^m,y^m)\}.
+\]
+
+Choose a threshold that is consistent with all of the training examples. If
+both labels appear, let
+\[
+x^-=\max\{x^i:y^i=-1\},
+\qquad
+x^+=\min\{x^i:y^i=1\},
+\]
+and choose any
+\[
+x^-\le\hat\theta<x^+.
+\]
+If only one label appears, choose any threshold consistent with the sample.
+Both \(x^-\) and \(x^+\) are found in one pass through \(S\), so the
+algorithm is efficient.
+
+If the chosen threshold has true error greater than \(\epsilon\), then it
+must be too far to the left or too far to the right of the true threshold
+\(\theta^*\). In either case, the training examples must miss a region with
+probability at least \(\epsilon\). Therefore
+\[
+\Pr[\mathrm{err}(h_{\hat\theta})>\epsilon]
+\le
+2(1-\epsilon)^m
+\le
+2e^{-\epsilon m}.
+\]
+
+To make this probability at most \(\delta\), require
+\[
+2e^{-\epsilon m}\le\delta.
+\]
+
+Taking logs gives
+\[
+\boxed{
+m\ge\frac{1}{\epsilon}\log\frac{2}{\delta}.
+}
+\]
+
+Thus
+\[
+\boxed{
+m=
+O\!\left(
+\frac{1}{\epsilon}\log\frac{1}{\delta}
+\right),
+}
+\]
+so the threshold class is PAC learnable with the required number of examples.
+
+% ============================================================
+\section*{5}
+
+Assume \(A\) has mistake bound \(t\), and define
+\[
+\mathrm{err}(h)=\Pr_{x\sim D}[h(x)\neq c(x)].
+\]
+
+\subsection*{(a)}
+
+Fix a hypothesis \(h'\) with
+\[
+\mathrm{err}(h')>\epsilon.
+\]
+
+The probability that it correctly classifies one fresh example is less than
+\(1-\epsilon\). Therefore, the probability that it correctly classifies a
+block of \(k\) fresh examples is at most
+\[
+(1-\epsilon)^k\le e^{-\epsilon k}.
+\]
+
+To make this at most \(\delta'\), choose
+\[
+e^{-\epsilon k}\le\delta'.
+\]
+
+Hence
+\[
+\boxed{
+k\ge\frac{1}{\epsilon}\log\frac{1}{\delta'}.
+}
+\]
+
+\subsection*{(b)}
+
+Since \(A\) changes its hypothesis only after a mistake and makes at most
+\(t\) mistakes, at most \(t+1\) hypotheses need to be considered. Set
+\[
+\delta'=\frac{\delta}{t+1}.
+\]
+
+Using part (a), choose
+\[
+\boxed{
+k=
+\left\lceil
+\frac{1}{\epsilon}\log\frac{t+1}{\delta}
+\right\rceil.
+}
+\]
+
+Using \(t+1\) blocks gives
+\[
+\boxed{
+m=(t+1)
+\left\lceil
+\frac{1}{\epsilon}\log\frac{t+1}{\delta}
+\right\rceil.
+}
+\]
+
+\subsection*{(c)}
+
+Algorithm \(B\) uses \(A\) as follows:
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+    \item Split the \(m\) examples into \(t+1\) blocks of size \(k\).
+    \item Test the current hypothesis of \(A\) on the next block.
+    \item If it classifies the whole block correctly, output it.
+    \item Otherwise, give \(A\) one misclassified example so that \(A\)
+    updates, and continue to the next block.
+\end{enumerate}
+
+Every failed block causes one mistake. If all \(t+1\) blocks failed, then
+\(A\) would make \(t+1\) mistakes, which contradicts the mistake bound
+\(t\). Therefore, some hypothesis must pass a block.
+
+For any bad hypothesis with error greater than \(\epsilon\), part (a) shows
+that the probability of passing its block is at most
+\[
+\frac{\delta}{t+1}.
+\]
+
+There are at most \(t+1\) hypotheses, so the union bound gives
+\[
+\Pr[\mathrm{err}(B)>\epsilon]
+\le
+(t+1)\frac{\delta}{t+1}
+=
+\delta.
+\]
+
+Thus, with probability at least \(1-\delta\), the output has error at most
+\(\epsilon\). The total sample size is
+\[
+\boxed{
+m=
+O\!\left(
+\frac{t+1}{\epsilon}
+\log\frac{t+1}{\delta}
+\right).
+}
+\]
+
+\end{document}
