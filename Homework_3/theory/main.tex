@@ -1,0 +1,103 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\T}{\mathsf{T}}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\diag}{diag}
+
+\title{Homework 3 -- Theory}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{1}
+
+$A$ is $m \times d$ with $m \gg d$, and $X = AA^\T$ is $m \times m$. The black box takes a symmetric matrix and returns its eigenvalues and an orthonormal set of eigenvectors.
+
+The idea is to run the black box on $A^\T A$, which is only $d \times d$, and then turn its eigenvectors into eigenvectors of $X$ by multiplying by $A$.
+
+First, a quick fact about $A$. Since $X$ is symmetric with $d$ nonzero eigenvalues, $\rank(X) = d$, and
+\[
+  d = \rank(AA^\T) \le \rank(A) \le d ,
+\]
+so $\rank(A) = d$ and $A^\T A$ is invertible. Also
+\[
+  v^\T (A^\T A)\, v = \|Av\|^2 \ge 0
+\]
+for any $v$, so the eigenvalues of $A^\T A$ are all $\ge 0$, and since it is invertible they are all $> 0$. We need this because we divide by them.
+
+The algorithm:
+\begin{enumerate}[leftmargin=2em]
+  \item Form $Y = A^\T A$.
+  \item Run the black box on $Y$ to get $Y = V \Lambda V^\T$, with $V = [\,v_1 \cdots v_d\,]$ orthogonal and $\Lambda = \diag(\lambda_1, \dots, \lambda_d)$, all $\lambda_i > 0$.
+  \item For each $i$, set $\displaystyle u_i = \frac{A v_i}{\sqrt{\lambda_i}}$.
+  \item Return the pairs $(\lambda_i, u_i)$. The other $m - d$ eigenvalues of $X$ are $0$, and their eigenvectors are anything orthogonal to the $u_i$ (Gram--Schmidt gives a basis if we need one).
+\end{enumerate}
+
+Now check the $u_i$. They have unit length, since
+\[
+  \|A v_i\|^2 = v_i^\T A^\T A\, v_i = \lambda_i\, v_i^\T v_i = \lambda_i .
+\]
+They are eigenvectors of $X$, since
+\[
+  X u_i = \frac{A (A^\T A)\, v_i}{\sqrt{\lambda_i}} = \frac{A (\lambda_i v_i)}{\sqrt{\lambda_i}} = \lambda_i u_i .
+\]
+And they are orthogonal to each other, since
+\[
+  u_i^\T u_j = \frac{v_i^\T A^\T A\, v_j}{\sqrt{\lambda_i \lambda_j}}
+             = \frac{\lambda_j\, v_i^\T v_j}{\sqrt{\lambda_i \lambda_j}}
+             = 0 \quad \text{for } i \ne j .
+\]
+So we have $d$ orthonormal eigenvectors of $X$ with nonzero eigenvalues. $X$ only has $d$ nonzero eigenvalues, so these are all of them, and everything else is $0$.
+
+For the cost, forming $A^\T A$ is $O(md^2)$, the black box on a $d \times d$ matrix is $O(d^3)$, and computing $A v_1, \dots, A v_d$ is $O(md^2)$. In total that is $O(md^2 + d^3)$, compared to $O(m^3)$ for running the black box on $X$ directly, and we never form an $m \times m$ matrix.
+
+\section*{2}
+
+\subsection*{(a)}
+
+True. Linear regression picks $w$ to minimize
+\[
+  \frac{1}{m} \sum_{i=1}^m \left( w^\T x^i - y^i \right)^2 ,
+\]
+which needs the labels $y^i$. It is fitting a function to labeled data, so it is supervised.
+
+\subsection*{(b)}
+
+True. PCA picks orthonormal $v_1, \dots, v_k$ to maximize
+\[
+  \frac{1}{m} \sum_{j=1}^m \sum_{i=1}^k \langle x^j, v_i \rangle^2 ,
+\]
+and only the inputs $x^j$ appear. There are no labels, so it is unsupervised.
+
+\subsection*{(c)}
+
+False, it is the other way around. SVD is a matrix factorization, $A = U S V^\T$, and it works on any matrix. PCA is a procedure on a dataset: center the data, then take the top eigenvectors of the covariance matrix $\frac{1}{m} X^\T X$. PCA is usually computed with an SVD of the centered data matrix, since the right singular vectors of $X$ are the eigenvectors of $X^\T X$, but that makes SVD a tool that PCA uses, not a special case of it.
+
+\subsection*{(d)}
+
+Run PCA on the inputs first, then do the regression on the projected data.
+
+Center the data, compute the SVD of the centered matrix $X = U S V^\T$, keep the $k$ columns $V_k$ whose singular values are nonzero, and replace each input by
+\[
+  z = V_k^\T (x - \mu) \in \R^k .
+\]
+Fit $w$ by least squares on the pairs $(z^i, y^i)$, and project new inputs the same way before predicting.
+
+Why this works: if two columns are linearly dependent, some direction in feature space has zero variance, so $X^\T X$ has a zero eigenvalue and the normal equations $X^\T X w = X^\T y$ have infinitely many solutions. In the height example the centimetre column is $2.54$ times the inches column, so $v \propto (2.54, -1)$ gives $Xv = 0$. PCA drops that direction. The projected data is $Z = X V_k = U_k S_k$, and
+\[
+  Z^\T Z = S_k^2
+\]
+is diagonal with positive entries, so it is invertible and
+\[
+  w = (Z^\T Z)^{-1} Z^\T y
+\]
+is unique. The redundant feature is gone, so there is only one way to fit the data.
+
+\end{document}
