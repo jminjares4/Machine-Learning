@@ -1,81 +1,70 @@
+
 # Machine Learning (AI391L)
 
-Coursework for AI391L Machine Learning, UT Austin MSAI.
+Coursework for **AI391L: Machine Learning** in the **M.S. in Artificial Intelligence** program at **The University of Texas at Austin**.
+
+This repository contains programming assignments, Jupyter notebooks, theoretical derivations, and LaTeX write-ups.
+
+## Assignments
+
+| Homework | Programming | Theory |
+|---|---|---|
+| [Homework 0](Homework_0/) | [Notebook](Homework_0/HW0.ipynb) | — |
+| [Homework 1](Homework_1/) | [Notebook](Homework_1/programming/hw1_programming_base_notebook.ipynb) | [PDF](Homework_1/theory/hw1_theory.pdf) · [LaTeX](Homework_1/theory/hw1_theory.tex) |
+| [Homework 2](Homework_2/) | [Notebook](Homework_2/programming/hw2_programming_base_notebook.ipynb) | [PDF](Homework_2/theory/hw2_theory.pdf) · [LaTeX](Homework_2/theory/hw2_theory.tex) |
+| [Homework 3](Homework_3/) | [Notebook](Homework_3/programming/hw3_programming_base_notebook.ipynb) | [PDF](Homework_3/theory/hw3_theory.pdf) · [LaTeX](Homework_3/theory/hw3_theory.tex) |
+| [Homework 4](Homework_4/) | — | [PDF](Homework_4/theory/hw4_theory.pdf) · [LaTeX](Homework_4/theory/hw4_theory.tex) |
+
+## Repository Structure
+
+```text
+.
+├── Homework_0/
+├── Homework_1/
+├── Homework_2/
+├── Homework_3/
+├── Homework_4/
+├── README.md
+└── requirements.txt
+```
+
+Assignments are organized into `programming/` and `theory/` directories where applicable.
+
+- **Programming:** Jupyter notebooks, assignment handouts, and PDF exports.
+- **Theory:** Problem statements, LaTeX source files, and compiled PDFs.
 
 ## Setup
 
-Requires Python 3 and VS Code with the Python and Jupyter extensions. Building the theory write-ups from source also requires a LaTeX distribution (TeX Live, MacTeX, or MiKTeX).
+Requires Python 3 and VS Code with the Python and Jupyter extensions. Compiling theory assignments requires a LaTeX distribution such as TeX Live, MacTeX, or MiKTeX.
+
+### Install Dependencies
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate       # Windows: .venv\Scripts\activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-pip install --upgrade pip
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-In VS Code: `Cmd+Shift+P` → **Python: Select Interpreter** → select `.venv/bin/python`. Then open the notebook, click the kernel selector in the top right, and choose the same environment.
+### Run Notebooks
 
-## Contents
+Open the repository in VS Code, select the `.venv` Python interpreter, and choose the same environment as the Jupyter kernel.
 
-```
-.
-├── Homework_0/
-│   ├── HW0.ipynb
-│   └── hw0_programming_handout-1.pdf
-├── Homework_1/
-│   ├── programming/
-│   │   ├── hw1_programming_base_notebook.ipynb
-│   │   ├── hw1_programming_base_notebook.pdf
-│   │   └── hw1_programming_handout.pdf
-│   └── theory/
-│       ├── hw1_theory_handout.pdf
-│       ├── hw1_theory.tex
-│       └── hw1_theory.pdf
-├── requirements.txt
-└── README.md
-```
+Notebooks can also be run in [Google Colab](https://colab.research.google.com/).
 
-Each assignment folder holds the instructor handouts alongside the submitted work. From Homework 1 on, assignments split into a `programming/` half (Jupyter notebook, exported to PDF for submission) and a `theory/` half (LaTeX source and its compiled PDF).
+### Compile Theory Assignments
 
-### Homework 0
-
-Environment setup and an introduction to the Python data stack. Uses the breast cancer dataset from `sklearn.datasets` to practice loading data into a DataFrame, inspecting its shape, and visualizing feature relationships with scatterplots and pairwise plots.
-
-### Homework 1
-
-- **programming/** — `hw1_programming_base_notebook.ipynb` is the working notebook, with `hw1_programming_base_notebook.pdf` as the exported submission copy. `hw1_programming_handout.pdf` is the instructions.
-- **theory/** — `hw1_theory.tex` holds the written derivations; `hw1_theory.pdf` is the compiled output. `hw1_theory_handout.pdf` is the problem set.
-
-Compile the theory write-up with:
+For example, to compile Homework 4:
 
 ```bash
-cd Homework_1/theory
-pdflatex hw1_theory.tex
+cd Homework_4/theory
+pdflatex hw4_theory.tex
 ```
-
-## Dependencies
-
-| Package | Purpose |
-|---|---|
-| jupyter | Notebook environment |
-| scikit-learn | Machine learning models and datasets |
-| pandas | Data manipulation |
-| matplotlib | Plotting |
-| seaborn | Statistical visualization |
-
-`numpy` and `scipy` install automatically as dependencies.
-
-## Notes
-
-Notebooks can also be run in [Google Colab](https://colab.research.google.com/) with no local setup.
 
 ## Troubleshooting
 
-**Imports fail in a notebook but work in the terminal** — the kernel is pointing at the wrong environment. Run `import sys; print(sys.executable)` in a cell and reselect the kernel if it isn't the `.venv` path.
-
-**Newly installed packages aren't found** — restart the kernel (⟳ in the notebook toolbar).
-
-**`.venv` doesn't appear in the kernel list** — reload the window (`Cmd+Shift+P` → **Developer: Reload Window**). Confirm VS Code is opened at the repo root, not a parent or subfolder.
-
-**`pdflatex` not found** — install a LaTeX distribution, or compile `hw1_theory.tex` in [Overleaf](https://www.overleaf.com/) instead.
+- **Import errors:** Verify the notebook uses the correct Python kernel with `import sys; print(sys.executable)`.
+- **Missing packages:** Restart the Jupyter kernel after installation.
+- **Environment not detected:** Reload VS Code and reselect the Python interpreter.
+- **LaTeX compilation errors:** Verify that `pdflatex` is installed or use [Overleaf](https://www.overleaf.com/).
