@@ -1,0 +1,223 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+
+\title{Homework 4 -- Theory}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ============================================================
+\section*{1}
+
+\subsection*{(a)}
+
+The probabilities must add to 1 and be non-negative:
+\[
+\theta_1+2\theta_1+\theta_2=1.
+\]
+
+\[
+\boxed{
+3\theta_1+\theta_2=1,\qquad
+\theta_1\geq0,\quad\theta_2\geq0
+}
+\]
+
+\subsection*{(b)}
+
+The observations are independent, so
+\[
+\begin{aligned}
+P(D\mid\theta)
+&=\prod_{i=1}^{n}P(x^{(i)}\mid\theta)\\
+&=\theta_1^{s_1}(2\theta_1)^{s_2}\theta_2^{s_3}\\
+&=2^{s_2}\theta_1^{s_1+s_2}\theta_2^{s_3}.
+\end{aligned}
+\]
+
+Taking the log,
+\[
+\boxed{
+\log P(D\mid\theta)
+=s_2\log2+(s_1+s_2)\log\theta_1
++s_3\log\theta_2
+}
+\]
+
+\subsection*{(c)}
+
+Using $\theta_2=1-3\theta_1$,
+\[
+\ell(\theta_1)
+=s_2\log2+(s_1+s_2)\log\theta_1
++s_3\log(1-3\theta_1).
+\]
+
+Set the derivative to zero:
+\[
+\frac{d\ell}{d\theta_1}
+=\frac{s_1+s_2}{\theta_1}
+-\frac{3s_3}{1-3\theta_1}=0.
+\]
+
+Solving,
+\[
+(s_1+s_2)(1-3\theta_1)=3s_3\theta_1,
+\]
+\[
+s_1+s_2=3(s_1+s_2+s_3)\theta_1
+=3n\theta_1.
+\]
+
+Then,
+\[
+\hat\theta_1=\frac{s_1+s_2}{3n},
+\qquad
+\hat\theta_2=1-3\hat\theta_1=\frac{s_3}{n}.
+\]
+
+The log-likelihood is concave, so this is a maximum.
+The formula also holds at the endpoints.
+
+\[
+\boxed{
+\hat\theta=
+\left[\frac{s_1+s_2}{3n},\frac{s_3}{n}\right]
+}
+\]
+
+% ============================================================
+\section*{2}
+
+The likelihood is
+\[
+\begin{aligned}
+L(\beta)
+&=\prod_{i=1}^{n}\frac{1}{\beta}e^{-x^{(i)}/\beta}\\
+&=\beta^{-n}\exp\left(
+-\frac{1}{\beta}\sum_{i=1}^{n}x^{(i)}
+\right).
+\end{aligned}
+\]
+
+Taking the log,
+\[
+\ell(\beta)
+=-n\log\beta-\frac{1}{\beta}
+\sum_{i=1}^{n}x^{(i)}.
+\]
+
+Set the derivative to zero:
+\[
+\frac{d\ell}{d\beta}
+=-\frac{n}{\beta}
++\frac{1}{\beta^2}\sum_{i=1}^{n}x^{(i)}=0.
+\]
+
+Multiplying by $\beta^2$,
+\[
+-n\beta+\sum_{i=1}^{n}x^{(i)}=0.
+\]
+
+For $\bar{x}>0$, the derivative changes from
+positive to negative at $\beta=\bar{x}$,
+so this is the maximum.
+
+\[
+\boxed{
+\hat\beta=\frac{1}{n}\sum_{i=1}^{n}x^{(i)}
+=\bar{x}
+}
+\]
+
+% ============================================================
+\section*{3}
+
+\subsection*{(a)}
+
+There are 5 defective items out of 30:
+\[
+p(D\mid\theta)
+=\binom{30}{5}\theta^5(1-\theta)^{25}.
+\]
+
+The prior is uniform, so $p(\theta)=1$ on $[0,1]$.
+
+Using Bayes' rule,
+\[
+p(\theta\mid D)\propto p(D\mid\theta)p(\theta).
+\]
+
+Removing the constant,
+\[
+\boxed{
+p(\theta\mid D)\propto
+\theta^5(1-\theta)^{25},
+\qquad 0\leq\theta\leq1
+}
+\]
+
+This is a $\mathrm{Beta}(6,26)$ distribution.
+
+\subsection*{(b)}
+
+Given $x^{(i)}\sim\mathcal N(\mu,1)$
+and $\mu\sim\mathcal N(0,1)$,
+\[
+p(\mu\mid D)\propto p(D\mid\mu)p(\mu).
+\]
+
+Using the likelihood and prior,
+\[
+p(\mu\mid D)\propto
+\exp\left(
+-\frac12\left[
+\sum_{i=1}^{n}(x^{(i)}-\mu)^2+\mu^2
+\right]\right).
+\]
+
+Expanding,
+\[
+\begin{aligned}
+&\sum_{i=1}^{n}(x^{(i)}-\mu)^2+\mu^2\\
+&=(n+1)\mu^2-2\mu\sum_{i=1}^{n}x^{(i)}
++\sum_{i=1}^{n}(x^{(i)})^2.
+\end{aligned}
+\]
+
+Completing the square and removing constants,
+\[
+p(\mu\mid D)\propto
+\exp\left(
+-\frac{n+1}{2}
+\left(
+\mu-\frac{\sum_{i=1}^{n}x^{(i)}}{n+1}
+\right)^2
+\right).
+\]
+
+The mean and variance are
+\[
+\text{Mean}=\frac{\sum_{i=1}^{n}x^{(i)}}{n+1},
+\qquad
+\text{Variance}=\frac{1}{n+1}.
+\]
+
+Thus,
+\[
+\boxed{
+\mu\mid D\sim
+\mathcal N\left(
+\frac{\sum_{i=1}^{n}x^{(i)}}{n+1},
+\frac{1}{n+1}
+\right)
+}
+\]
+
+\end{document}
