@@ -14,7 +14,7 @@ This repository contains programming assignments, Jupyter notebooks, theoretical
 | [Homework 2](Homework_2/) | [Notebook](Homework_2/programming/hw2_programming_base_notebook.ipynb) | [PDF](Homework_2/theory/hw2_theory.pdf) · [LaTeX](Homework_2/theory/hw2_theory.tex) |
 | [Homework 3](Homework_3/) | [Notebook](Homework_3/programming/hw3_programming_base_notebook.ipynb) | [PDF](Homework_3/theory/hw3_theory.pdf) · [LaTeX](Homework_3/theory/hw3_theory.tex) |
 | [Homework 4](Homework_4/) | — | [PDF](Homework_4/theory/hw4_theory.pdf) · [LaTeX](Homework_4/theory/hw4_theory.tex) |
-
+| [Homework 5](Homework_5/) | [Notebook](Homework_5/programming/hw5_programming_base_notebook.ipynb) | [PDF](Homework_5/theory/hw5_theory.pdf) · [LaTeX](Homework_5/theory/hw5_theory.tex) |
 ## Repository Structure
 
 ```text
@@ -24,6 +24,7 @@ This repository contains programming assignments, Jupyter notebooks, theoretical
 ├── Homework_2/
 ├── Homework_3/
 ├── Homework_4/
+├── Homework_5/
 ├── README.md
 └── requirements.txt
 ```

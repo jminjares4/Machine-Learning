@@ -1,0 +1,135 @@
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+
+\title{Homework 5 -- Theory}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{1}
+
+\subsection*{(a)}
+
+From $\Sigma$,
+\[
+\operatorname{Cov}(X_3,X_4)=\Sigma_{34}=0.
+\]
+Thus, $\boxed{X_3 \text{ and } X_4 \text{ are not correlated.}}$
+
+\subsection*{(b)}
+
+Using the $\{3,4\}$ block of $Q$,
+\[
+\operatorname{Cov}((X_3,X_4)\mid X_1,X_2)
+=\begin{bmatrix}5&0\\0&5\end{bmatrix}^{-1}
+=\begin{bmatrix}0.2&0\\0&0.2\end{bmatrix}.
+\]
+\[
+\boxed{\operatorname{Cov}(X_3,X_4\mid X_1,X_2)=0}
+\]
+
+\subsection*{(c)}
+
+The only nonzero off-diagonal entry in row 2 of $Q$ is $Q_{21}=3$.
+\[
+\boxed{M_2=\{X_1\}}
+\]
+
+\subsection*{(d)}
+
+Using $Y_1=X_1+X_4$ and $Y_2=X_2-X_4$,
+\begin{align*}
+\operatorname{Var}(Y_1)
+&=\Sigma_{11}+2\Sigma_{14}+\Sigma_{44}\\
+&=0.71+0+0.2=0.91,\\
+\operatorname{Var}(Y_2)
+&=\Sigma_{22}-2\Sigma_{24}+\Sigma_{44}\\
+&=0.46-0+0.2=0.66,\\
+\operatorname{Cov}(Y_1,Y_2)
+&=\Sigma_{12}-\Sigma_{14}+\Sigma_{42}-\Sigma_{44}\\
+&=-0.43-0+0-0.2=-0.63.
+\end{align*}
+\[
+\boxed{\Sigma_Y=
+\begin{bmatrix}
+0.91&-0.63\\
+-0.63&0.66
+\end{bmatrix}}
+\]
+
+\section*{2}
+
+\subsection*{(a)}
+
+E-step:
+\[
+p=\frac{e^{-1/2}}{e^{-1/2}+e^{-9/2}}
+=\frac{1}{1+e^{-4}}\approx0.98.
+\]
+By symmetry, the other component has the same probability for $x=1$.
+
+M-step:
+\begin{align*}
+\mu_1
+&=\frac{p(-1)+(1-p)(1)}{p+(1-p)}
+=1-2p\approx-0.96,\\
+\mu_2
+&=\frac{(1-p)(-1)+p(1)}{(1-p)+p}
+=2p-1\approx0.96.
+\end{align*}
+\[
+\boxed{\mu_1\approx-0.96,\qquad\mu_2\approx0.96}
+\]
+
+\subsection*{(b)}
+
+No. By symmetry, let $(\mu_1,\mu_2)=(-a,a)$ with $a>0$.
+\[
+p=\frac{1}{1+e^{-2a}},
+\qquad
+a_{\text{new}}=2p-1
+=\frac{e^{2a}-1}{e^{2a}+1}
+=\tanh(a).
+\]
+Since $0<\tanh(a)<a$, the sequence decreases to $L$ satisfying $L=\tanh(L)$. Thus, $L=0$.
+\[
+\boxed{(\mu_1,\mu_2)\longrightarrow(0,0)}
+\]
+
+\subsection*{(c)}
+
+Since $\mu_1=\mu_2=2$, both components have equal probabilities.
+\[
+\mu_1=\mu_2
+=\frac{\frac12(-1)+\frac12(1)}
+{\frac12+\frac12}=0.
+\]
+The means remain at zero.
+\[
+\boxed{(\mu_1,\mu_2)=(0,0)}
+\]
+
+\subsection*{(d)}
+
+Each point is assigned to its nearest center:
+\[
+-1\rightarrow\mu_1,\qquad
+1\rightarrow\mu_2.
+\]
+The updated centers are
+\[
+\mu_1=-1,\qquad\mu_2=1.
+\]
+The assignments remain unchanged.
+\[
+\boxed{(\mu_1,\mu_2)=(-1,1)}
+\]
+
+\end{document}
